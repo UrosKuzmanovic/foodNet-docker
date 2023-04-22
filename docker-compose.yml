@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  mysql:
+    image: 'mysql:latest'
+
+  redis:
+    image: 'redis:latest'
+
+  nginx:
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./docker/nginx
+    ports:
+      - '3050:80'
+    depends_on:
+      - authenticator
+      - email
+
+  authenticator:
+    build:
+      dockerfile: Dockerfile
+      context: ./microservices/authenticator
+    volumes:
+      - /app/node_modules
+      - ./microservices/authenticator:/app
+
+  email:
+    build:
+      dockerfile: Dockerfile
+      context: ./microservices/email
+    volumes:
+      - /app/node_modules
+      - ./microservices/email:/app
