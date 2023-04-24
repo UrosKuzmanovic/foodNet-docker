@@ -8,12 +8,13 @@ services:
     image: 'redis:latest'
 
   nginx:
-    restart: always
-    build:
-      dockerfile: Dockerfile
-      context: ./docker/nginx
+    image: nginx:alpine
     ports:
-      - '3050:80'
+      - "80:80"
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/nginx.conf
+      - ./microservices/authenticator:/var/www/html/authenticator
+      - ./microservices/email:/var/www/html/email
     depends_on:
       - authenticator
       - email
@@ -23,13 +24,11 @@ services:
       dockerfile: Dockerfile
       context: ./microservices/authenticator
     volumes:
-      - /app/node_modules
-      - ./microservices/authenticator:/app
+      - ./microservices/authenticator/:/var/www/html/authenticator
 
   email:
     build:
       dockerfile: Dockerfile
       context: ./microservices/email
     volumes:
-      - /app/node_modules
-      - ./microservices/email:/app
+      - ./microservices/email/:/var/www/html/email
