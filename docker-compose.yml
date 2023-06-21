@@ -3,6 +3,12 @@ version: '3'
 services:
   mysql:
     image: 'mysql:latest'
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-vlm:/var/lib/mysql:delegated
 
   redis:
     image: 'redis:latest'
@@ -13,11 +19,20 @@ services:
       - "80:80"
     volumes:
       - ./docker/nginx/default.conf:/etc/nginx/nginx.conf
+      - ./microservices/foodNet-backend:/var/www/html/foodnet
       - ./microservices/authenticator:/var/www/html/authenticator
       - ./microservices/email:/var/www/html/email
     depends_on:
+      - foodnet
       - authenticator
       - email
+
+  foodnet:
+    build:
+      dockerfile: Dockerfile
+      context: ./microservices/foodNet-backend
+    volumes:
+      - ./microservices/foodNet-backend/:/var/www/html/foodnet
 
   authenticator:
     build:
@@ -32,3 +47,7 @@ services:
       context: ./microservices/email
     volumes:
       - ./microservices/email/:/var/www/html/email
+
+volumes:
+  mysql-vlm:
+  redis-vlm:

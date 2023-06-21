@@ -1,0 +1,112 @@
+= foodNet
+
+== Adding new microservice
+
+* *Clone* new microservice repository into _foodNet-docker/microservices/_ :
+
+[source,shell script]
+-----------------
+git clone [path]
+-----------------
+
+* *Copy* `Dockerfile-template` in _foodNet-docker/docker/templates/_ to microservice _root_, replace microservice name in *WORKDIR*.
+
+* Add new *microservice* in `docker-compose.yml`:
+
+    [name]:
+      build:
+        dockerfile: Dockerfile
+        context: ./microservices/[name]
+      volumes:
+        - ./microservices/[name]/:/var/www/html/[name]
+
+* Add new line in *nginx* _microservice_:
+
+    volumes:
+        - ./microservices/[name]:/var/www/html/[name]
+
+* Add new line in *nginx* _depends_on_:
+
+    depends_on:
+        - [name]
+
+* Add new *redirects* in `default.conf` in _foodNet-docker/docker/nginx/_
+
+    server {
+        listen       80;
+        server_name  localhost;
+        if ($request_uri ~ "^\/api\/[name]\/(.*)") {
+            set $servername [name];
+        }
+    ...
+
+    location ~ \.php$ {
+        try_files $uri /index.php;
+        if ($request_uri ~ "^\/api\/[name]\/(.*)") {
+            fastcgi_pass [name]:9000;
+        }
+    ...
+
+* Build container:
+
+[source,shell script]
+-----------------
+make build
+-----------------
+
+== Setting up microservice
+
+* Add permissions
+
+[source,shell script]
+-----------------
+sudo chmod -R 777 microservices/[name]
+-----------------
+
+* Add following lines in microservice `composer.json`:
+
+    "doctrine/dbal": "^3.6",
+    "doctrine/doctrine-bundle": "^2.9",
+    "doctrine/doctrine-migrations-bundle": "^3.2",
+    "doctrine/orm": "^2.14",
+    "sensio/framework-extra-bundle": "^6.2",
+    "symfony/serializer": "5.4.*",
+
+* Change php version in `composer.json` to *^7.4*
+
+* Delete `composer.lock`
+
+* Enter microservice container:
+
+[source,shell script]
+-----------------
+make shell instance=[name]
+-----------------
+
+* Install composer:
+
+[source,shell script]
+-----------------
+composer install
+-----------------
+
+=== Creating microservices database
+
+* Add *_ORM_* and *_Maker_* to *composer*:
+
+[source,shell script]
+-----------------
+composer require symfony/orm-pack
+composer require --dev symfony/maker-bundle
+-----------------
+
+* In `.env` file, add following line:
+
+    DATABASE_URL="mysql://[username]:[password]@mysql:3306/[name]_db?serverVersion=8&charset=utf8mb4"
+
+* Create doctrine database:
+
+[source,shell script]
+-----------------
+php bin/console doctrine:database:create
+-----------------
