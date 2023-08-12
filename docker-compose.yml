@@ -9,9 +9,13 @@ services:
       - "3306:3306"
     volumes:
       - mysql-vlm:/var/lib/mysql:delegated
+    networks:
+      - foodnet-net
 
   redis:
     image: 'redis:latest'
+    networks:
+      - foodnet-net
 
   nginx:
     image: nginx:alpine
@@ -26,6 +30,8 @@ services:
       - foodnet
       - authenticator
       - email
+    networks:
+      - foodnet-net
 
   foodnet:
     build:
@@ -33,6 +39,10 @@ services:
       context: ./microservices/foodNet-backend
     volumes:
       - ./microservices/foodNet-backend/:/var/www/html/foodnet
+    networks:
+      - foodnet-net
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   authenticator:
     build:
@@ -40,6 +50,8 @@ services:
       context: ./microservices/authenticator
     volumes:
       - ./microservices/authenticator/:/var/www/html/authenticator
+    networks:
+      - foodnet-net
 
   email:
     build:
@@ -47,6 +59,12 @@ services:
       context: ./microservices/email
     volumes:
       - ./microservices/email/:/var/www/html/email
+    networks:
+      - foodnet-net
+
+networks:
+  foodnet-net:
+    driver: bridge
 
 volumes:
   mysql-vlm:
