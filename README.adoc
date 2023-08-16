@@ -9,6 +9,8 @@
 git clone [path]
 -----------------
 
+* Add microservice name to *microservices* array in _build.sh_
+
 * *Copy* `Dockerfile-template` in _foodNet-docker/docker/templates/_ to microservice _root_, replace microservice name in *WORKDIR*.
 
 * Add new *microservice* in `docker-compose.yml`:
@@ -51,7 +53,7 @@ git clone [path]
 
 [source,shell script]
 -----------------
-make build
+make up
 -----------------
 
 == Setting up microservice
@@ -109,4 +111,18 @@ composer require --dev symfony/maker-bundle
 [source,shell script]
 -----------------
 php bin/console doctrine:database:create
+-----------------
+
+* Execute doctrine migrations:
+
+[source,shell script]
+-----------------
+php bin/console doctrine:migrations:migrate
+-----------------
+
+=== Run automated build
+[source,shell script]
+-----------------
+chmod +x build.sh
+./build.sh
 -----------------
