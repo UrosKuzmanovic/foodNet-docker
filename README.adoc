@@ -21,6 +21,8 @@ git clone [path]
         context: ./microservices/[name]
       volumes:
         - ./microservices/[name]/:/var/www/html/[name]
+      networks:
+        - foodnet-net
 
 * Add new line in *nginx* _microservice_:
 

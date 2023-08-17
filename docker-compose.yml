@@ -26,10 +26,12 @@ services:
       - ./microservices/foodNet-backend:/var/www/html/foodnet
       - ./microservices/authenticator:/var/www/html/authenticator
       - ./microservices/email:/var/www/html/email
+      - ./microservices/analytics:/var/www/html/analytics
     depends_on:
       - foodnet
       - authenticator
       - email
+      - analytics
     networks:
       - foodnet-net
 
@@ -59,6 +61,15 @@ services:
       context: ./microservices/email
     volumes:
       - ./microservices/email/:/var/www/html/email
+    networks:
+      - foodnet-net
+
+  analytics:
+    build:
+      dockerfile: Dockerfile
+      context: ./microservices/analytics
+    volumes:
+      - ./microservices/analytics/:/var/www/html/analytics
     networks:
       - foodnet-net
 

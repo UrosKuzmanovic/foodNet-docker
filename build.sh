@@ -6,6 +6,7 @@ git_username="UrosKuzmanovic"
 git_password="Ukikuzma1996!"
 
 microservices=(
+  "analytics"
   "authenticator"
   "email"
   "foodNet-backend"
