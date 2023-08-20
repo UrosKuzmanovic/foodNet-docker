@@ -2,7 +2,9 @@
 
 == Adding new microservice
 
-* *Clone* new microservice repository into _foodNet-docker/microservices/_ :
+** Create new Symfony project in _foodNet-docker/microservices/_
+
+* ...or *clone* existing microservice repository into _foodNet-docker/microservices/_ :
 
 [source,shell script]
 -----------------
@@ -16,7 +18,7 @@ git clone [path]
 * Add new *microservice* in `docker-compose.yml`:
 
     [name]:
-      build:
+      build:exit
         dockerfile: Dockerfile
         context: ./microservices/[name]
       volumes:
@@ -84,7 +86,7 @@ sudo chmod -R 777 microservices/[name]
 
 [source,shell script]
 -----------------
-make shell instance=[name]
+make shell container=[name]
 -----------------
 
 * Install composer:
