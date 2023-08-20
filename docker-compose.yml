@@ -27,11 +27,13 @@ services:
       - ./microservices/authenticator:/var/www/html/authenticator
       - ./microservices/email:/var/www/html/email
       - ./microservices/analytics:/var/www/html/analytics
+      - ./microservices/reviews:/var/www/html/reviews
     depends_on:
       - foodnet
       - authenticator
       - email
       - analytics
+      - reviews
     networks:
       - foodnet-net
 
@@ -70,6 +72,15 @@ services:
       context: ./microservices/analytics
     volumes:
       - ./microservices/analytics/:/var/www/html/analytics
+    networks:
+      - foodnet-net
+
+  reviews:
+    build:
+      dockerfile: Dockerfile
+      context: ./microservices/reviews
+    volumes:
+      - ./microservices/reviews/:/var/www/html/reviews
     networks:
       - foodnet-net
 

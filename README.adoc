@@ -18,7 +18,7 @@ git clone [path]
 * Add new *microservice* in `docker-compose.yml`:
 
     [name]:
-      build:exit
+      build:
         dockerfile: Dockerfile
         context: ./microservices/[name]
       volumes:

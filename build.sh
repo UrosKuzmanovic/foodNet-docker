@@ -10,6 +10,7 @@ microservices=(
   "authenticator"
   "email"
   "foodNet-backend"
+  "reviews"
 )
 
 for microservice in "${microservices[@]}"; do
