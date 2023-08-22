@@ -80,7 +80,7 @@ sudo chmod -R 777 microservices/[name]
 
 * Change php version in `composer.json` to *^7.4*
 
-* Delete `composer.lock`
+* Delete `composer.lock` and add it to `.gitignore`
 
 * Enter microservice container:
 
