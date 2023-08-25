@@ -98,12 +98,13 @@ composer install
 
 === Creating microservices database
 
-* Add *_ORM_* and *_Maker_* to *composer*:
+* Add *_ORM_*, *_Maker_* or *_Serializer_* to *composer*:
 
 [source,shell script]
 -----------------
 composer require symfony/orm-pack
 composer require --dev symfony/maker-bundle
+composer require symfony/serializer-pack
 -----------------
 
 * In `.env` file, add following line:
