@@ -2,8 +2,7 @@
 
 source .env
 
-git_username="UrosKuzmanovic"
-git_password="Ukikuzma1996!"
+git_token="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"
 
 microservices=(
   "analytics"
@@ -19,10 +18,10 @@ for microservice in "${microservices[@]}"; do
   if [ -d "$microservice" ]; then
     echo "Repository $microservice exists, updating with git pull"
     cd "$microservice"
-    git pull
+    git pull https://$git_token@github.com/$GIT_USERNAME/$microservice.git
   else
     echo "Cloning repository: $microservice"
-    git clone "https://$GIT_USERNAME:$GIT_PASSWORD@github.com/$git_username/$microservice.git"
+    git clone "https://$git_token@github.com/$GIT_USERNAME/$microservice.git"
     cd "$microservice"
   fi
 
