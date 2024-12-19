@@ -128,6 +128,7 @@ php bin/console doctrine:migrations:migrate
 === Run automated build
 [source,shell script]
 -----------------
+gt auth login
 chmod +x build.sh
 ./build.sh
 -----------------
